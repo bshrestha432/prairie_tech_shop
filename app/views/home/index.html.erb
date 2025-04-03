@@ -1,0 +1,25 @@
+<h1>Welcome to Prairie Tech Shop!</h1>
+<p>This is your home page.</p>
+
+<%= link_to 'Admin', '/admin', class: 'btn btn-primary' %>
+
+<h1><%= @homepage.title %></h1>
+<div><%= @homepage.content.html_safe %></div>
+
+<h2>Featured Products</h2>
+
+<% if @products.any? %>
+  <div class="products">
+    <% @products.each do |product| %>
+      <div class="product">
+        <h3><%= product.name %></h3>
+        <p><%= product.description %></p>
+        <p>Price: <%= number_to_currency(product.price) %></p>
+        <p>Stock: <%= product.stock_quantity %></p>
+        <p>Category: <%= product.category.name %></p>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p>No products available at the moment.</p>
+<% end %>
