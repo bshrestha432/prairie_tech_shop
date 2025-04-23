@@ -1,0 +1,17 @@
+<h1><%= @product.name %></h1>
+<p><%= @product.description %></p>
+<p><strong>Price:</strong> <%= number_to_currency(@product.price) %></p>
+<p><strong>Stock:</strong> <%= @product.stock_quantity %></p>
+<p><strong>Category:</strong> <%= @product.category.name %></p>
+
+<%= button_to 'Add to Cart', add_to_cart_product_path(@product), method: :post, class: 'btn btn-primary' %>
+
+<%= link_to 'Back to Products', products_path, class: 'btn btn-primary' %>
+
+<!-- Check if the image is attached -->
+<% if @product.image.attached? %>
+  <!-- Display the image if attached, adjust the size accordingly -->
+  <%= image_tag @product.image, size: "300x300", alt: @product.name %>
+<% else %>
+  <p>No image available</p>
+<% end %>

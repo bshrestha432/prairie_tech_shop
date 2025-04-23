@@ -1,0 +1,19 @@
+<!-- app/views/categories/show.html.erb -->
+
+<h1><%= @category.name %> Products</h1>
+
+<% if @products.any? %>
+  <div class="products">
+    <% @products.each do |product| %>
+      <div class="product-card">
+        <h3><%= product.name %></h3>
+        <p><%= product.description %></p>
+        <p><strong>Price:</strong> <%= number_to_currency(product.price) %></p>
+        <p><strong>Stock:</strong> <%= product.stock_quantity %></p>
+        <%= link_to 'View Product', product_path(product), class: 'btn btn-secondary' %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p>No products available in this category.</p>
+<% end %>

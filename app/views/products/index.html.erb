@@ -1,0 +1,49 @@
+<h1 class="text-center text-warning">Welcome to Prairie Tech Shop!</h1>
+<p class="text-center">Explore our collection of amazing products.</p>
+
+<h2 class="mt-5 text-center text-info">Browse Products by Category</h2>
+
+<%= form_with(url: products_path, method: :get, local: true, class: 'd-flex justify-content-center') do |form| %>
+  <div class="form-group mx-2">
+    <%= form.label :category, "Select Category", class: 'form-label' %>
+    <%= form.select :category, options_from_collection_for_select(@categories, :name, :name, selected: params[:category]), prompt: "Select a Category", class: "form-select" %>
+  </div>
+  <%= form.submit "View Products", class: "btn btn-primary mx-2" %>
+<% end %>
+
+<h2 class="mt-5 text-center text-info">Featured Products</h2>
+
+<% if @products.any? %>
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <% @products.each do |product| %>
+      <div class="col">
+        <div class="card h-100 bg-dark text-white">
+          <% if product.image.attached? %>
+            <%= image_tag product.image, size: "300x300", alt: product.name, class: "card-img-top" %>
+          <% else %>
+            <img src="https://via.placeholder.com/300" class="card-img-top" alt="No image available">
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title"><%= product.name %></h5>
+            <p class="card-text"><%= product.description %></p>
+            <p><strong>Price:</strong> <%= number_to_currency(product.price) %></p>
+            <p><strong>Stock:</strong> <%= product.stock_quantity %></p>
+            <p><strong>Category:</strong> <%= product.category.present? ? product.category.name : 'No category' %></p>
+          </div>
+          <div class="card-footer text-center">
+            <%= button_to 'Add to Cart', add_to_cart_product_path(product), method: :post, class: 'btn btn-success' %>
+            <%= link_to 'View Product', product_path(product), class: 'btn btn-secondary mx-2' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Pagination controls -->
+  <div class="mt-4 text-center">
+    <%= paginate @products, class: 'pagination justify-content-center' %>  <!-- This renders the pagination links -->
+  </div>
+
+<% else %>
+  <p class="text-center">No products available for this category.</p>
+<% end %>

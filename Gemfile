@@ -2,9 +2,27 @@ source "https://rubygems.org"
 
 gem 'activeadmin'
 
+gem 'actiontext'
+
+gem 'stripe'
+
+gem 'ransack'
+
+gem 'activestorage'
+
+gem 'activerecord-session_store'
+
+gem 'json'
+
+gem 'nokogiri'
+
+gem 'open-uri'
+
 gem 'devise'
 
 gem 'faker'
+
+gem 'kaminari-bootstrap'
 
 gem 'kaminari'
 
