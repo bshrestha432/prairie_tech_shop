@@ -18,70 +18,58 @@ class CheckoutController < ApplicationController
 
   # Handle checkout and create an order from the current cart
   def complete_checkout
-    # Set the Stripe secret key (from Rails credentials)
-    Stripe.api_key = Rails.application.credentials.stripe[:secret_key]  # Ensure Stripe is authenticated
+    # Set up Stripe with your secret key
+    Stripe.api_key = Rails.application.credentials.stripe[:secret_key]
 
     @cart = current_user.cart
     @invoice = calculate_invoice(@cart)
 
     payment_method_id = params[:payment_method_id]
 
-    # Create a PaymentIntent to confirm the payment using Stripe's API
     begin
       payment_intent = Stripe::PaymentIntent.create({
-        amount: (@invoice[:total_price] * 100).to_i,  # Amount in cents (Stripe works in the smallest currency unit)
+        amount: (@invoice[:total_price] * 100).to_i,  # Amount in cents
         currency: 'usd',
         payment_method: payment_method_id,  # Payment method ID received from Stripe Elements on the frontend
-        confirm: true,  # Automatically confirm the payment
+        confirm: true,
+        payment_method_types: ['card'],
       })
 
-      # If payment was successful, create the order
       if payment_intent.status == 'succeeded'
-        # Build the order with the current user's data
-        @order = current_user.orders.build(order_params)
-        @order.total_price = @invoice[:total_price]
-        @order.tax = @invoice[:taxes]
-        @order.payment_status = 'paid'  # Set the payment status to "paid"
-        @order.payment_id = payment_intent.id  # Save the Stripe Payment ID to the order
+        # Create invoice record
+        @invoice = Invoice.create!(
+          user: current_user,
+          total_amount: @invoice[:total_price],
+          status: 'paid',
+          payment_method_id: payment_intent.id
+        )
 
-        # Save the order to the database
-        if @order.save
-          # Associate cart items with the order
-          @cart.cart_items.each do |cart_item|
-            @order.order_items.create(
-              product: cart_item.product,
-              quantity: cart_item.quantity,
-              price: cart_item.product.price
-            )
-          end
+        # Create order record and associate cart items
+        @order = current_user.orders.create(
+          total_price: @invoice.total_amount,
+          tax: @invoice.taxes,
+          payment_status: 'paid',
+          invoice: @invoice  # Associate the order with the invoice
+        )
 
-          # Clear the cart after checkout
-          current_user.cart.cart_items.destroy_all
-
-          # Redirect to the order confirmation page with a success message
-
-          # define route, which controller which method should it be redirected to.
-          redirect_to order_path(@order), notice: "Your order has been placed successfully!"
-        else
-          flash[:alert] = "There was a problem processing your order."
-          render :show
+        @cart.cart_items.each do |cart_item|
+          @order.order_items.create(
+            product: cart_item.product,
+            quantity: cart_item.quantity,
+            price: cart_item.product.price
+          )
         end
+
+        # Clear the cart after payment
+        current_user.cart.cart_items.destroy_all
+
+        # Return JSON response with order ID for redirect
+        render json: { order_id: @order.id }, status: :ok
       else
-        flash[:alert] = "Payment failed. Please try again."
-        render :show
+        render json: { error: 'Payment failed. Please try again.' }, status: :unprocessable_entity
       end
-    rescue Stripe::CardError => e
-      flash[:alert] = e.message
-      render :show
-    rescue Stripe::AuthenticationError => e
-      flash[:alert] = "Stripe authentication error: #{e.message}"
-      render :show
-    rescue Stripe::APIConnectionError => e
-      flash[:alert] = "Network error with Stripe: #{e.message}"
-      render :show
     rescue Stripe::StripeError => e
-      flash[:alert] = "Stripe error: #{e.message}"
-      render :show
+      render json: { error: e.message }, status: :unprocessable_entity
     end
   end
 
@@ -103,16 +91,5 @@ class CheckoutController < ApplicationController
                else 0.05  # Default GST
                end
     cart.cart_items.sum { |item| item.product.price * item.quantity } * tax_rate
-  end
-
-  # Strong parameters for order creation
-  def order_params
-    # If order params aren't present, use an empty hash
-    if params[:order].present?
-      params.require(:order).permit(:shipping_address)
-    else
-      # Get shipping address from user's customer record or use default
-      { shipping_address: current_user.customer&.address || "Default address" }
-    end
   end
 end

@@ -3,11 +3,11 @@
 <% if @cart.cart_items.any? %>
   <div class="container mt-4">
     <p>Your cart contains <%= @cart.cart_items.count %> item(s).</p>
-    <p>Total Price: <%= number_to_currency(@invoice[:total_price]) %></p>  <!-- Format as currency -->
+    <p>Total Price: <%= number_to_currency(@invoice[:total_price]) %></p>
     <p>Taxes: <%= number_to_currency(@invoice[:taxes]) %></p>
 
     <!-- Checkout Form -->
-    <%= form_with url: create_order_checkout_path, method: :post, id: "checkout-form" do |f| %>
+    <%= form_with url: complete_checkout_path, method: :post, id: "checkout-form" do |f| %>
       <div class="mb-3">
         <!-- Stripe Elements for collecting card details -->
         <%= f.label :payment_method, "Credit Card", class: "form-label" %><br />
@@ -35,7 +35,6 @@
   var elements = stripe.elements();
 
   var card = elements.create('card');
-
   card.mount('#card-element');
 
   var form = document.getElementById('checkout-form');
@@ -48,7 +47,7 @@
       if (result.error) {
         document.getElementById('card-errors').textContent = result.error.message;
       } else {
-        fetch('<%= create_order_checkout_path %>', {
+        fetch('<%= complete_checkout_path %>', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken },
           body: JSON.stringify({
@@ -60,7 +59,7 @@
           if (data.error) {
             document.getElementById('card-errors').textContent = data.error;
           } else {
-            window.location.href = "/order/" + data.order_id;
+            window.location.href = "/order/" + data.order_id; // Redirect to the order confirmation page
           }
         });
       }

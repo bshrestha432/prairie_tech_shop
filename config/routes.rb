@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "invoices/show"
   get "users/index"
   get "checkout/show"
   devise_for :users, controllers: { registrations: 'users/registrations' }
@@ -29,6 +30,10 @@ Rails.application.routes.draw do
     end
   end
 
+  post 'complete_checkout', to: 'checkout#complete_checkout', as: :complete_checkout
+  resources :orders, only: [:show]  # This is for the order confirmation page
+
+
   # Cart routes
   get 'cart', to: 'products#cart'  # View shopping cart
   post 'cart/update_quantity/:id', to: 'products#update_quantity', as: :update_cart_quantity # Update quantity in cart
@@ -38,8 +43,6 @@ Rails.application.routes.draw do
 
   # About page route
   get 'about', to: 'about_pages#show', as: :about_page
-
-  get 'order_confirmation', to: 'home#order_confirmation', as: 'order_confirmation'
 
   # Home route (root path)
   root "home#index"

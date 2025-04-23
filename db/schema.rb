@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_21_204154) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_23_163558) do
   create_table "about_pages", force: :cascade do |t|
     t.string "title"
     t.text "content"
@@ -134,6 +134,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_21_204154) do
     t.index ["user_id"], name: "index_customers_on_user_id"
   end
 
+  create_table "invoices", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.decimal "total_amount"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_invoices_on_user_id"
+  end
+
   create_table "order_items", force: :cascade do |t|
     t.integer "product_id", null: false
     t.integer "order_id", null: false
@@ -227,6 +236,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_21_204154) do
   add_foreign_key "cart_items", "products"
   add_foreign_key "carts", "users"
   add_foreign_key "customers", "users"
+  add_foreign_key "invoices", "users"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "user_addresses", "users"
