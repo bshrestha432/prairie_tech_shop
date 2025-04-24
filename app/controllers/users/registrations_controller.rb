@@ -15,7 +15,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # Ensure address fields are handled for the user during registration or profile update
   def configure_permitted_parameters
-    # For the sign-up process (new user registration)
+    # For the sign-up process (new user registrations)
     devise_parameter_sanitizer.permit(:sign_up, keys: [:username, :email, :password, :password_confirmation, :province_id])
 
     # For the account update process (updating user profile)
