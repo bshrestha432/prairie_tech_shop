@@ -1,7 +1,7 @@
 ActiveAdmin.register ContactPage do
   permit_params :title, :content
 
-  # Define the form for editing the contact page
+  # Define the form for editing the contact pages
   form do |f|
     f.inputs "Contact Page" do
       f.input :title
