@@ -76,7 +76,7 @@ class ProductsController < ApplicationController
     product = Product.find(params[:id])
     quantity = params[:quantity].to_i
 
-    # Find the cart item and update its quantity
+    # Find the cart item and update its quantities
     cart_item = current_user.cart.cart_items.find_by(product: product)
 
     if cart_item
