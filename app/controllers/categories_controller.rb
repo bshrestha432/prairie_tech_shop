@@ -10,7 +10,7 @@ class CategoriesController < ApplicationController
     # Find the category by its ID
     @category = Category.find(params[:id])
 
-    # Fetch all products belonging to this category
+    # Fetch all products belonging to this categoriesS
     @products = @category.products
   end
 end
