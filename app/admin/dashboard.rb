@@ -10,7 +10,7 @@ ActiveAdmin.register_page "Dashboard" do
       end
     end
 
-    # Here is an example of a simple dashboard with columns and panels.
+    # Here is an example of a simple dashboard with columns and pannnels.
     #
     # columns do
     #   column do
