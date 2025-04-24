@@ -10,7 +10,7 @@ ActiveAdmin.register Page do
     actions
   end
 
-  # Define the form fields for creating or editing a page
+  # Define the form fields for creating or editing a pages
   form do |f|
     f.inputs do
       f.input :title
