@@ -15,7 +15,7 @@ class HomeController < ApplicationController
     # Create a new order in the database
     @order = Order.create!(user: current_user, total_price: @invoice[:total_price])
 
-    # Example: Charge the payment using Stripe (you need to have Stripe set up)
+    # Example: Charge the payment using Stripe (You need to have Stripe set up)
     begin
       charge = Stripe::PaymentIntent.create({
         amount: (@invoice[:total_price] * 100).to_i,  # Amount in cents
