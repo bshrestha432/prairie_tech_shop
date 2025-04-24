@@ -13,7 +13,7 @@ class Product < ApplicationRecord
     ["category"]
   end
 
-  # Scope for products on sale
+  # Scope for products on sales
   scope :on_sale, -> { where(on_sale: true) }
 
   # Scope for products that were added within the last 3 days
