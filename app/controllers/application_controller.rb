@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   # Permit username and address fields during sign up and account update
   def configure_permitted_parameters
-    # Adding address fields in the permitted attributes
+    # Adding address fields in the permitted attribute
     added_attrs = [:email, :password, :password_confirmation, :remember_me,
                    :username, :address_line1, :city, :postal_code, :country]
 
