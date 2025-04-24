@@ -4,7 +4,7 @@ class HomeController < ApplicationController
   def index
     @homepage = Page.find_by(title: 'Home')  # Find the page with title 'Home'
 
-    # If the Home page is missing, create a default one (optional fallback)
+    # If the Home page is mising, create a default one (optional fallback)
     if @homepage.nil?
       @homepage = Page.create!(title: 'Home', content: 'Content for the home page is missing. Please create one in the admin.')
     end
