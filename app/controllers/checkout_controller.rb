@@ -9,7 +9,7 @@ class CheckoutController < ApplicationController
     @customer = current_user.customer
     @stripe_publishable_key = Rails.application.credentials.stripe[:publishable_key]  # Access Stripe Publishable Key from credentials.yml.enc
 
-    # If the customer doesn't have an address, they should be prompted to enter it
+    # If the customer doesn't have an addres, they should be prompted to enter it
     if @customer && @customer.address.nil?
       flash[:notice] = "Please provide your address before completing the checkout."
       redirect_to edit_user_registration_path  # Redirect to address edit page
