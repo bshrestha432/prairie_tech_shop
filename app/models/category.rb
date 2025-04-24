@@ -1,7 +1,7 @@
 class Category < ApplicationRecord
   has_many :products
 
-  # Explicitly list searchable attributes
+  # Explicitly list searchable attribute
   def self.ransackable_attributes(auth_object = nil)
     ["name", "description", "id", "created_at", "updated_at"]
   end
