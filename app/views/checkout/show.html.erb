@@ -6,7 +6,7 @@
     <p>Total Price: <%= number_to_currency(@invoice[:total_price]) %></p>
     <p>Taxes: <%= number_to_currency(@invoice[:taxes]) %></p>
 
-    <!-- Checkout Form -->
+    <!-- Checkout Forms -->
     <%= form_with url: complete_checkout_path, method: :post, id: "checkout-form" do |f| %>
       <div class="mb-3">
         <!-- Stripe Elements for collecting card details -->
