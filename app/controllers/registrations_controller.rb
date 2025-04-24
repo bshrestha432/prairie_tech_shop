@@ -18,7 +18,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   private
 
   def user_params
-    # Allow only the necessary fields for update
+    # Allow only the necessary fields for updates
     params.require(:user).permit(:email, :province_id, :password, :password_confirmation)
   end
 
