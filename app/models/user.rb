@@ -3,7 +3,7 @@ class User < ApplicationRecord
   has_one :customer, dependent: :destroy
   has_one :cart, dependent: :destroy
 
-  # Devise modules for authentication
+  # Devise modules for authentications
   devise :database_authenticatable, :registerable,
         :recoverable, :rememberable, :validatable
 
