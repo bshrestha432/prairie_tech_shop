@@ -1,7 +1,7 @@
 ActiveAdmin.register Category do
   permit_params :name, :description, product_ids: []  # Allow the selection of multiple products
 
-  # Define the columns to display in the admin index page
+  # Define the columns to display in the admin index pages
   index do
     selectable_column
     id_column
