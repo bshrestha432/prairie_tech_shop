@@ -28,7 +28,7 @@ ActiveAdmin.register Category do
     f.actions
   end
 
-  # Controller for search functionality
+  # Controller for search functionalities
   controller do
     def scoped_collection
       # This allows filtering categories based on products
