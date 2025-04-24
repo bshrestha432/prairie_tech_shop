@@ -2,7 +2,7 @@ class AdminUser < ApplicationRecord
   devise :database_authenticatable, :rememberable, :validatable
   # If you are using ActiveAdmin, add any other necessary code here
 
-  # Explicitly define searchable attributes
+  # Explicitly define searchable attribute
   def self.ransackable_attributes(auth_object = nil)
     ["email", "username", "created_at", "updated_at"]
   end
